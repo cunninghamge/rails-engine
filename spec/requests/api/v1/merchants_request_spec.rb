@@ -112,9 +112,9 @@ RSpec.describe "Merchants API" do
 
   describe 'get one merchant' do
     it 'returns a single record by id' do
-      create(:merchant)
+      id = create(:merchant).id
 
-      get "/api/v1/merchants/#{merchant.id}"
+      get "/api/v1/merchants/#{id}"
 
       expect(response).to be_successful
 
@@ -123,11 +123,11 @@ RSpec.describe "Merchants API" do
       expect(merchant).to be_a(Hash)
       check_hash_structure(merchant, :data, Hash)
       check_hash_structure(merchant[:data], :id, String)
-      check_hash_structure(merchant, :type, String)
-      check_hash_structure(merchant, :attributes, Hash)
-      check_hash_structure(merchant[:attributes], :name, String)
-      expect(merchant.keys).to match_array(%i[id type attributes])
-      expect(merchant[:attributes].keys).to match_array(%i[name])
+      check_hash_structure(merchant[:data], :type, String)
+      check_hash_structure(merchant[:data], :attributes, Hash)
+      check_hash_structure(merchant[:data][:attributes], :name, String)
+      expect(merchant[:data].keys).to match_array(%i[id type attributes])
+      expect(merchant[:data][:attributes].keys).to match_array(%i[name])
     end
   end
 end
