@@ -14,7 +14,6 @@ RSpec.describe "Merchants API" do
       expect(merchants).to be_a(Hash)
       check_hash_structure(merchants, :data, Array)
       expect(merchants[:data].count).to eq(20)
-      expect(merchants[:data].pluck(:id).map(&:to_i)).to match_array(Merchant.first(20).pluck(:id))
 
       merchants[:data].each do |merchant|
         expect(merchant).to be_a(Hash)
