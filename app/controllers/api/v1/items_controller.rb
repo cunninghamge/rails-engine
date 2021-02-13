@@ -15,7 +15,7 @@ class Api::V1::ItemsController < ApplicationController
 
   def create
     item = Item.create!(item_params)
-    render json: ItemSerializer.format_new_item(item), status: :created
+    render json: ItemSerializer.format_item(item), status: :created
   end
 
   def destroy
