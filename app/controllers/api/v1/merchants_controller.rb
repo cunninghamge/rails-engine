@@ -13,8 +13,8 @@ class Api::V1::MerchantsController < ApplicationController
     render json: MerchantSerializer.format_merchant(merchant)
   end
 
-  def find_one
-    merchant = Merchant.find_one(params[:text])
+  def find
+    merchant = Merchant.find_one(params[:name])
     render json: MerchantSerializer.format_merchant(merchant)
   end
 end

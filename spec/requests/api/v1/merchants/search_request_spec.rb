@@ -4,7 +4,7 @@ RSpec.describe 'merchant search' do
   it 'returns a single merchant' do
     create(:merchant, name: "Ring World")
 
-    get "/api/v1/merchants/find_one?text=ring"
+    get "/api/v1/merchants/find?name=ring"
 
     expect(response).to be_successful
 
@@ -23,7 +23,7 @@ RSpec.describe 'merchant search' do
   it 'returns an empty Hash if no merchant is not found' do
     create(:merchant)
 
-    get "/api/v1/merchants/find_one?text=NOMATCH"
+    get "/api/v1/merchants/find?name=NOMATCH"
 
     expect(response).to be_successful
 
@@ -35,7 +35,7 @@ RSpec.describe 'merchant search' do
   end
 
   it 'returns an empty Hash if no query string is provided' do
-    get "/api/v1/merchants/find_one"
+    get "/api/v1/merchants/find"
 
     expect(response).to be_successful
 
