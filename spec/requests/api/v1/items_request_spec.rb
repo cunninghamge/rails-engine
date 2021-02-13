@@ -24,8 +24,9 @@ RSpec.describe "Items API" do
         check_hash_structure(item[:attributes], :name, String)
         check_hash_structure(item[:attributes], :description, String)
         check_hash_structure(item[:attributes], :unit_price, Float)
+        check_hash_structure(item[:attributes], :merchant_id, Integer)
         expect(item.keys).to match_array(%i[id type attributes])
-        expect(item[:attributes].keys).to match_array(%i[name description unit_price])
+        expect(item[:attributes].keys).to match_array(%i[name description unit_price merchant_id])
       end
     end
 
