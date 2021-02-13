@@ -76,6 +76,12 @@ RSpec.describe "Merchants API" do
 
         expect(merchants[:data].count).to eq(2)
       end
+
+      it 'returns an error if the user enters a negative number' do
+        get '/api/v1/merchants?per_page=-2'
+
+        expect(response.status).to eq(400)
+      end
     end
 
     it 'allows for optional page query param' do
@@ -107,6 +113,71 @@ RSpec.describe "Merchants API" do
 
       expect(merchants[:data].count).to eq(2)
       expect(merchants[:data].pluck(:id).map(&:to_i)).to eq(Merchant.last(2).pluck(:id))
+    end
+
+    describe 'fetches page 1 if user enters a page less than 1' do
+      it 'if page is 0' do
+        create_list(:merchant, 21)
+
+        get '/api/v1/merchants?page=0'
+
+        expect(response).to be_successful
+
+        merchants = JSON.parse(response.body, symbolize_names: true)
+
+        expect(merchants).to be_a(Hash)
+        check_hash_structure(merchants, :data, Array)
+        expect(merchants[:data].count).to eq(20)
+        expect(merchants[:data].pluck(:id).map(&:to_i)).to match_array(Merchant.first(20).pluck(:id))
+      end
+
+      it 'if page is less than 1' do
+        create_list(:merchant, 21)
+
+        get '/api/v1/merchants?page=-2'
+
+        expect(response).to be_successful
+
+        merchants = JSON.parse(response.body, symbolize_names: true)
+
+        expect(merchants).to be_a(Hash)
+        check_hash_structure(merchants, :data, Array)
+        expect(merchants[:data].count).to eq(20)
+        expect(merchants[:data].pluck(:id).map(&:to_i)).to match_array(Merchant.first(20).pluck(:id))
+      end
+    end
+  end
+
+  describe 'get one merchant' do
+    it 'returns a single record by id' do
+      id = create(:merchant).id
+
+      get "/api/v1/merchants/#{id}"
+
+      expect(response).to be_successful
+
+      merchant = JSON.parse(response.body, symbolize_names: true)
+
+      expect(merchant).to be_a(Hash)
+      check_hash_structure(merchant, :data, Hash)
+      check_hash_structure(merchant[:data], :id, String)
+      check_hash_structure(merchant[:data], :type, String)
+      check_hash_structure(merchant[:data], :attributes, Hash)
+      check_hash_structure(merchant[:data][:attributes], :name, String)
+      expect(merchant[:data].keys).to match_array(%i[id type attributes])
+      expect(merchant[:data][:attributes].keys).to match_array(%i[name])
+    end
+
+    it 'returns a 404 if record does not exist' do
+      get "/api/v1/merchants/1"
+
+      expect(response.status).to eq(404)
+    end
+
+    it 'returns a 404 if a non-integer is entered' do
+      get "/api/v1/merchants/one"
+
+      expect(response.status).to eq(404)
     end
   end
 end
