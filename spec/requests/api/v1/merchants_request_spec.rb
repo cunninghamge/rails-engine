@@ -76,6 +76,12 @@ RSpec.describe "Merchants API" do
 
         expect(merchants[:data].count).to eq(2)
       end
+
+      it 'returns an error if the user enters a negative number' do
+        get '/api/v1/merchants?per_page=-2'
+
+        expect(response.status).to eq(400)
+      end
     end
 
     it 'allows for optional page query param' do
@@ -107,6 +113,38 @@ RSpec.describe "Merchants API" do
 
       expect(merchants[:data].count).to eq(2)
       expect(merchants[:data].pluck(:id).map(&:to_i)).to eq(Merchant.last(2).pluck(:id))
+    end
+
+    describe 'fetches page 1 if user enters a page less than 1' do
+      it 'if page is 0' do
+        create_list(:merchant, 21)
+
+        get '/api/v1/merchants?page=0'
+
+        expect(response).to be_successful
+
+        merchants = JSON.parse(response.body, symbolize_names: true)
+
+        expect(merchants).to be_a(Hash)
+        check_hash_structure(merchants, :data, Array)
+        expect(merchants[:data].count).to eq(20)
+        expect(merchants[:data].pluck(:id).map(&:to_i)).to match_array(Merchant.first(20).pluck(:id))
+      end
+
+      it 'if page is less than 1' do
+        create_list(:merchant, 21)
+
+        get '/api/v1/merchants?page=-2'
+
+        expect(response).to be_successful
+
+        merchants = JSON.parse(response.body, symbolize_names: true)
+
+        expect(merchants).to be_a(Hash)
+        check_hash_structure(merchants, :data, Array)
+        expect(merchants[:data].count).to eq(20)
+        expect(merchants[:data].pluck(:id).map(&:to_i)).to match_array(Merchant.first(20).pluck(:id))
+      end
     end
   end
 
