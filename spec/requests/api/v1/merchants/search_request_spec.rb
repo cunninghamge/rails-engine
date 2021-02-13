@@ -20,7 +20,7 @@ RSpec.describe 'merchant search' do
     expect(merchant[:data][:attributes].keys).to match_array(%i[name])
   end
 
-  it 'returns an empty Hash if no merchant is not found' do
+  it 'returns an empty hash if no merchant is not found' do
     create(:merchant)
 
     get "/api/v1/merchants/find?name=NOMATCH"
@@ -34,7 +34,7 @@ RSpec.describe 'merchant search' do
     expect(merchant[:data]).to be_empty
   end
 
-  it 'returns an empty Hash if no query string is provided' do
+  it 'returns an empty hash if no query string is provided' do
     get "/api/v1/merchants/find"
 
     expect(response).to be_successful
