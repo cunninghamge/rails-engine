@@ -311,8 +311,8 @@ RSpec.describe "Items API" do
       delete "/api/v1/items/#{item.id}"
 
       expect(response).to be_successful
-      expect(Item.count).to eq(1)
-      expect(Invoice.count).to eq(1)
+      expect(Item.count).to eq(0)
+      expect(Invoice.count).to eq(0)
       expect{ Item.find(item.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect{ Invoice.find(invoice.id) }.to raise_error(ActiveRecord::RecordNotFound)
     end

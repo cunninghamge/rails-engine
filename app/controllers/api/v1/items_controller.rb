@@ -18,6 +18,10 @@ class Api::V1::ItemsController < ApplicationController
     render json: ItemSerializer.format_new_item(item), status: :created
   end
 
+  def destroy
+    Item.find(params[:id]).destroy
+  end
+
   private
 
   def item_params
