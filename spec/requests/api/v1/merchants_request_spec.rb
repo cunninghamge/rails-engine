@@ -19,8 +19,11 @@ RSpec.describe "Merchants API" do
       merchants[:data].each do |merchant|
         expect(merchant).to be_a(Hash)
         check_hash_structure(merchant, :id, Integer)
-        check_hash_structure(merchant, :name, String)
-        expect(merchant.keys).to match_array(Merchant.attribute_names.map(&:to_sym))
+        check_hash_structure(merchant, :type, String)
+        check_hash_structure(merchant, :attributes, Hash)
+        check_hash_structure(merchant[:attributes], :name, String)
+        expect(merchant.keys).to match_array(%i[id type attributes])
+        expect(merchant[:attributes].keys).to match_array(%i[name])
       end
     end
 
