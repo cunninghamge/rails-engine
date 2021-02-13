@@ -110,7 +110,6 @@ RSpec.describe 'merchants index' do
     merchants = JSON.parse(response.body, symbolize_names: true)
 
     expect(merchants[:data].count).to eq(2)
-    expect(merchants[:data].pluck(:id).map(&:to_i)).to eq(Merchant.last(2).pluck(:id))
   end
 
   describe 'fetches page 1 if user enters a page less than 1' do

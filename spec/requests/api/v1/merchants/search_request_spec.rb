@@ -34,9 +34,15 @@ RSpec.describe 'merchant search' do
     expect(merchant[:data]).to be_empty
   end
 
-  it 'returns an error if no query string is provided' do
+  it 'returns an empty Hash if no query string is provided' do
     get "/api/v1/merchants/find_one"
 
-    expect(response.status).to eq(400)
+    expect(response).to be_successful
+
+    merchant = JSON.parse(response.body, symbolize_names: true)
+
+    expect(merchant).to be_a(Hash)
+    check_hash_structure(merchant, :data, Hash)
+    expect(merchant[:data]).to be_empty
   end
 end
