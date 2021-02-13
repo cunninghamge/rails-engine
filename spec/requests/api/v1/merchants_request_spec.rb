@@ -14,11 +14,11 @@ RSpec.describe "Merchants API" do
       expect(merchants).to be_a(Hash)
       check_hash_structure(merchants, :data, Array)
       expect(merchants[:data].count).to eq(20)
-      expect(merchants[:data].pluck(:id)).to match_array(Merchant.first(20).pluck(:id))
+      expect(merchants[:data].pluck(:id).map(&:to_i)).to match_array(Merchant.first(20).pluck(:id))
 
       merchants[:data].each do |merchant|
         expect(merchant).to be_a(Hash)
-        check_hash_structure(merchant, :id, Integer)
+        check_hash_structure(merchant, :id, String)
         check_hash_structure(merchant, :type, String)
         check_hash_structure(merchant, :attributes, Hash)
         check_hash_structure(merchant[:attributes], :name, String)
@@ -62,7 +62,7 @@ RSpec.describe "Merchants API" do
         merchants = JSON.parse(response.body, symbolize_names: true)
 
         expect(merchants[:data].count).to eq(2)
-        expect(merchants[:data].pluck(:id)).to match_array(Merchant.first(2).pluck(:id))
+        expect(merchants[:data].pluck(:id).map(&:to_i)).to match_array(Merchant.first(2).pluck(:id))
       end
 
       it 'users can request more than the total number of merchants' do
@@ -106,7 +106,7 @@ RSpec.describe "Merchants API" do
       merchants = JSON.parse(response.body, symbolize_names: true)
 
       expect(merchants[:data].count).to eq(2)
-      expect(merchants[:data].pluck(:id)).to eq(Merchant.last(2).pluck(:id))
+      expect(merchants[:data].pluck(:id).map(&:to_i)).to eq(Merchant.last(2).pluck(:id))
     end
   end
 end
