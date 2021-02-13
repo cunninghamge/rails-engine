@@ -11,14 +11,16 @@ RSpec.describe "Merchants API" do
 
       merchants = JSON.parse(response.body, symbolize_names: true)
 
-      expect(merchants.count).to eq(20)
-      expect(merchants.pluck(:id)).to match_array(Merchant.first(20).pluck(:id))
+      expect(merchants).to be_a(Hash)
+      check_hash_structure(merchants, :data, Array)
+      expect(merchants[:data].count).to eq(20)
+      expect(merchants[:data].pluck(:id)).to match_array(Merchant.first(20).pluck(:id))
 
-      merchants.each do |merchant|
+      merchants[:data].each do |merchant|
         expect(merchant).to be_a(Hash)
-        check_structure(merchant, :id, Integer)
-        check_structure(merchant, :name, String)
-        expect(merchant.keys).to include(:id, :name)
+        check_hash_structure(merchant, :id, Integer)
+        check_hash_structure(merchant, :name, String)
+        expect(merchant.keys).to match_array(Merchant.attribute_names.map(&:to_sym))
       end
     end
 
@@ -31,8 +33,8 @@ RSpec.describe "Merchants API" do
 
       merchants = JSON.parse(response.body, symbolize_names: true)
 
-      expect(merchants).to be_an(Array)
-      expect(merchants.count).to eq(1)
+      expect(merchants[:data]).to be_an(Array)
+      expect(merchants[:data].count).to eq(1)
     end
 
     it 'sends an array of data even if zero resources are found' do
@@ -42,8 +44,8 @@ RSpec.describe "Merchants API" do
 
       merchants = JSON.parse(response.body, symbolize_names: true)
 
-      expect(merchants).to be_an(Array)
-      expect(merchants.count).to eq(0)
+      expect(merchants[:data]).to be_an(Array)
+      expect(merchants[:data].count).to eq(0)
     end
 
     describe 'allows for optional per_page query param' do
@@ -56,8 +58,8 @@ RSpec.describe "Merchants API" do
 
         merchants = JSON.parse(response.body, symbolize_names: true)
 
-        expect(merchants.count).to eq(2)
-        expect(merchants.pluck(:id)).to match_array(Merchant.first(2).pluck(:id))
+        expect(merchants[:data].count).to eq(2)
+        expect(merchants[:data].pluck(:id)).to match_array(Merchant.first(2).pluck(:id))
       end
 
       it 'users can request more than the total number of merchants' do
@@ -69,7 +71,7 @@ RSpec.describe "Merchants API" do
 
         merchants = JSON.parse(response.body, symbolize_names: true)
 
-        expect(merchants.count).to eq(2)
+        expect(merchants[:data].count).to eq(2)
       end
     end
 
@@ -86,9 +88,9 @@ RSpec.describe "Merchants API" do
 
       page2 = JSON.parse(response.body, symbolize_names: true)
 
-      expect(page1.size).to eq(20)
-      expect(page2.size).to eq(1)
-      expect(page1.pluck(:id)).not_to include(page2.pluck(:id))
+      expect(page1[:data].size).to eq(20)
+      expect(page2[:data].size).to eq(1)
+      expect(page1[:data].pluck(:id)).not_to include(page2[:data].pluck(:id))
     end
 
     it 'allows the user to pass both per_page and page query params' do
@@ -100,8 +102,8 @@ RSpec.describe "Merchants API" do
 
       merchants = JSON.parse(response.body, symbolize_names: true)
 
-      expect(merchants.count).to eq(2)
-      expect(merchants.pluck(:id)).to eq(Merchant.last(2).pluck(:id))
+      expect(merchants[:data].count).to eq(2)
+      expect(merchants[:data].pluck(:id)).to eq(Merchant.last(2).pluck(:id))
     end
   end
 end

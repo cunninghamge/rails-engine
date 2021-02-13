@@ -1,5 +1,6 @@
 class Api::V1::MerchantsController < ApplicationController
   def index
-    render json: Merchant.select_merchants(params[:per_page], params[:page])
+    merchants = Merchant.select_merchants(params[:per_page], params[:page])
+    render json: MerchantSerializer.format_merchants(merchants)
   end
 end
