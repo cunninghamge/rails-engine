@@ -217,4 +217,72 @@ RSpec.describe "Items API" do
       expect(response.status).to eq(404)
     end
   end
+
+  describe 'create an item' do
+    it 'creates a new item' do
+      merchant_id = create(:merchant).id
+      item_params = attributes_for(:item).merge(merchant_id: merchant_id)
+      headers = {'CONTENT_TYPE' => 'application/json'}
+
+      post '/api/v1/items', headers: headers, params: JSON.generate(item: item_params)
+
+      created_item = Item.last
+
+      expect(response).to be_successful
+      expect(created_item.name).to eq(item_params[:name])
+      expect(created_item.description).to eq(item_params[:description])
+      expect(created_item.unit_price).to eq(item_params[:unit_price])
+      expect(created_item.merchant_id).to eq(item_params[:merchant_id])
+
+      item = JSON.parse(response.body, symbolize_names: true)
+
+      expect(item).to be_a(Hash)
+      check_hash_structure(item, :data, Hash)
+      check_hash_structure(item[:data], :id, String)
+      check_hash_structure(item[:data], :type, String)
+      check_hash_structure(item[:data], :attributes, Hash)
+      check_hash_structure(item[:data][:attributes], :name, String)
+      check_hash_structure(item[:data][:attributes], :description, String)
+      check_hash_structure(item[:data][:attributes], :unit_price, Float)
+      check_hash_structure(item[:data][:attributes], :merchant_id, Integer)
+      check_hash_structure(item[:data][:attributes], :created_at, String)
+      check_hash_structure(item[:data][:attributes], :updated_at, String)
+      expect(item[:data].keys).to match_array(%i[id type attributes])
+      expect(item[:data][:attributes].keys).to match_array(Item.column_names.map(&:to_sym))
+    end
+
+    it 'returns an error if any attributes are missing' do
+      merchant_id = create(:merchant).id
+      item_params = attributes_for(:item).merge(merchant_id: merchant_id)
+      missing_name = item_params.except(:name)
+      missing_description = item_params.except(:description)
+      missing_unit_price = item_params.except(:unit_price)
+      missing_merchant_id = item_params.except(:merchant_id)
+      headers = {'CONTENT_TYPE' => 'application/json'}
+      param_sets = [missing_name, missing_description, missing_unit_price, missing_merchant_id]
+
+      param_sets.each do |set|
+        post '/api/v1/items', headers: headers, params: JSON.generate(item: set)
+
+        expect(response.status).to eq(422)
+      end
+    end
+
+    it 'ignores any additional attributes sent by the user' do
+      merchant_id = create(:merchant).id
+      item_params = attributes_for(:item).merge(merchant_id: merchant_id, model_number: '28P1817074')
+
+      headers = {'CONTENT_TYPE' => 'application/json'}
+
+      post '/api/v1/items', headers: headers, params: JSON.generate(item: item_params)
+
+      expect(response).to be_successful
+
+      created_item = Item.last
+      expect(created_item).not_to have_attribute(:model_number)
+
+      item = JSON.parse(response.body, symbolize_names: true)
+      expect(item[:data][:attributes].keys).to match_array(Item.column_names.map(&:to_sym))
+    end
+  end
 end
