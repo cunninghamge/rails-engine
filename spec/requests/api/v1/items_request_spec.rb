@@ -229,6 +229,7 @@ RSpec.describe "Items API" do
       created_item = Item.last
 
       expect(response).to be_successful
+      expect(response.status).to eq(201)
       expect(created_item.name).to eq(item_params[:name])
       expect(created_item.description).to eq(item_params[:description])
       expect(created_item.unit_price).to eq(item_params[:unit_price])
@@ -248,7 +249,8 @@ RSpec.describe "Items API" do
       check_hash_structure(item[:data][:attributes], :created_at, String)
       check_hash_structure(item[:data][:attributes], :updated_at, String)
       expect(item[:data].keys).to match_array(%i[id type attributes])
-      expect(item[:data][:attributes].keys).to match_array(Item.column_names.map(&:to_sym))
+      attributes = %i[name description unit_price merchant_id created_at updated_at]
+      expect(item[:data][:attributes].keys).to match_array(attributes)
     end
 
     it 'returns an error if any attributes are missing' do
@@ -282,7 +284,8 @@ RSpec.describe "Items API" do
       expect(created_item).not_to have_attribute(:model_number)
 
       item = JSON.parse(response.body, symbolize_names: true)
-      expect(item[:data][:attributes].keys).to match_array(Item.column_names.map(&:to_sym))
+      attributes = %i[name description unit_price merchant_id created_at updated_at]
+      expect(item[:data][:attributes].keys).to match_array(attributes)
     end
   end
 end
