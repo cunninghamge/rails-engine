@@ -3,6 +3,6 @@ FactoryBot.define do
     invoice
     credit_card_number { Faker::Finance.credit_card }
     credit_card_expiration_date { "04/23" }
-    result { [0, 1, 2].sample }
+    result { [:success, :failed, :refunded].sample }
   end
 end
