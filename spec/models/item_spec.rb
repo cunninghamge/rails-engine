@@ -1,7 +1,17 @@
 require 'rails_helper'
 
 RSpec.describe Item, type: :model do
-  it { should belong_to :merchant }
+  describe 'relationships' do
+    it { should belong_to :merchant }
+    it { should have_many(:invoice_items).dependent(:destroy) }
+    it { should have_many(:invoices).through(:invoice_items) }
+  end
+
+  describe 'validations' do
+    it { should validate_presence_of(:name) }
+    it { should validate_presence_of(:description) }
+    it { should validate_presence_of(:unit_price) }
+  end
 
   describe 'class methods' do
     describe '.select_records' do
@@ -31,6 +41,33 @@ RSpec.describe Item, type: :model do
 
         selected = Item.select_records(2, 2)
         expect(selected).to eq([Item.last])
+      end
+    end
+  end
+
+  describe 'instance methods' do
+    describe '#destroy_dependent_invoices' do
+      it 'deletes an invoice if it has no other items' do
+        item = create(:item)
+        invoices_to_delete = create_list(:invoice, 2, :with_items, items: [item])
+        invoice_to_keep = create(:invoice, :with_items, items: [item, create(:item)])
+        invoice_without_this_item = create(:invoice, :with_items, items: [create(:item)])
+
+        item.destroy_dependent_invoices
+
+        expect(item.invoices).to match_array([invoice_to_keep])
+        expect(Invoice.find(invoice_to_keep.id)).to eq(invoice_to_keep)
+        expect(Invoice.find(invoice_without_this_item.id)).to eq(invoice_without_this_item)
+      end
+
+      it 'deletes dependent invoices on deletion of the item' do
+        item = create(:item)
+        invoice_to_delete = create(:invoice, :with_items, items: [item])
+
+        item.destroy
+
+        expect{ Item.find(item.id) }.to raise_error(ActiveRecord::RecordNotFound)
+        expect{ Invoice.find(invoice_to_delete.id) }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end
