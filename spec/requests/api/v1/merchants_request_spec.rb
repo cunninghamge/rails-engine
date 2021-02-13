@@ -184,7 +184,7 @@ RSpec.describe "Merchants API" do
   describe 'get all items for a merchant' do
     it 'gets all items associated with a merchant' do
       merchant = create(:merchant)
-      create_list(:item, 3, merchant: merchant)
+      create_list(:item, 21, merchant: merchant)
 
       get "/api/v1/merchants/#{merchant.id}/items"
 
@@ -194,7 +194,7 @@ RSpec.describe "Merchants API" do
 
       expect(items).to be_a(Hash)
       check_hash_structure(items, :data, Array)
-      expect(items[:data].count).to eq(3)
+      expect(items[:data].count).to eq(21)
 
       items[:data].each do |item|
         expect(item).to be_a(Hash)
@@ -225,6 +225,10 @@ RSpec.describe "Merchants API" do
 
     it 'returns a 404 if merchant is not found' do
       get "/api/v1/merchants/1/items"
+
+      expect(response.status).to eq(404)
+
+      get "/api/v1/merchants/one/items"
 
       expect(response.status).to eq(404)
     end
