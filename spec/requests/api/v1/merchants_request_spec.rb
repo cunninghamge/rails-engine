@@ -173,5 +173,11 @@ RSpec.describe "Merchants API" do
 
       expect(response.status).to eq(404)
     end
+
+    it 'returns a 404 if a non-integer is entered' do
+      get "/api/v1/merchants/one"
+
+      expect(response.status).to eq(404)
+    end
   end
 end
