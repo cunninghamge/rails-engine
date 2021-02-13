@@ -14,8 +14,8 @@ class MerchantSerializer
         attributes: {
           name: merchant.name
         } }
-      else
-        {}
-      end
+    else
+      {}
+    end
   end
 end
