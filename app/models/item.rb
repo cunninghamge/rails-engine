@@ -3,9 +3,9 @@ class Item < ApplicationRecord
   has_many :invoice_items, dependent: :destroy
   has_many :invoices, through: :invoice_items
 
-  before_destroy :destroy_dependent_invoices, prepend: true
-
   validates :name, :description, :unit_price, presence: true
+
+  before_destroy :destroy_dependent_invoices, prepend: true
 
   def destroy_dependent_invoices
     invoices.unscope(:where)
