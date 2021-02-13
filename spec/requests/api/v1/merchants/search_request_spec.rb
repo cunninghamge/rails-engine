@@ -39,17 +39,4 @@ RSpec.describe 'merchant search' do
 
     expect(response.status).to eq(400)
   end
-
-  it 'returns the first merchant in the database in case-sensitive alphabetical order if multiple matches are found' do
-    turing = create(:merchant, name: "Turing")
-    ring_world = create(:merchant, name: "Ring World")
-
-    get "/api/v1/merchants/find_one?text=ring"
-
-    expect(response).to be_successful
-
-    merchant = JSON.parse(response.body, symbolize_names: true)
-
-    expect(merchant[:data][:id]).to eq(ring_world.to_s)
-  end
 end
