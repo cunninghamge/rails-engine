@@ -28,12 +28,13 @@ class Api::V1::ItemsController < ApplicationController
     Item.find(params[:id]).destroy
   end
 
-
   def find_all
-    items = if params[:name] && !(params[:min_price] || params[:max_price])
+    items = if params[:name].present? && !(params[:min_price] || params[:max_price])
               Item.find_all_by_text(params[:name])
             elsif !params[:name]
               Item.find_all_by_price(params[:min_price], params[:max_price])
+            elsif params[:name].blank?
+              []
             end
     render json: ItemSerializer.format_items(items)
   end

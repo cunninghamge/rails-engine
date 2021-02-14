@@ -60,6 +60,20 @@ RSpec.describe 'items search' do
       expect(items[:data]).to be_empty
     end
 
+    it 'returns an empty array if no fragment is given' do
+      create(:item)
+
+      get "/api/v1/items/find_all?name="
+
+      expect(response).to be_successful
+
+      items = JSON.parse(response.body, symbolize_names: true)
+
+      expect(items).to be_a(Hash)
+      check_hash_structure(items, :data, Array)
+      expect(items[:data]).to be_empty
+    end
+
     it 'returns a single item in an array if only one item is found' do
       item = create(:item, name: "Pants")
 
