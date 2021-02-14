@@ -5,10 +5,13 @@ Rails.application.routes.draw do
       resources :merchants, only: %i[index show] do
         resources :items, only: :index
       end
+
       get 'items/find_all', to: 'items#find_all'
+      get 'items/revenue', to: 'items#revenue'
       resources :items do
         resource :merchant, only: :show
       end
+      
       get 'revenue', to: 'revenue#revenue'
     end
   end
