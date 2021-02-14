@@ -13,7 +13,6 @@ RSpec.describe 'items index' do
     expect(items).to be_a(Hash)
     check_hash_structure(items, :data, Array)
     expect(items[:data].count).to eq(20)
-    expect(items[:data].pluck(:id).map(&:to_i)).to match_array(Item.first(20).pluck(:id))
 
     items[:data].each do |item|
       expect(item).to be_a(Hash)
@@ -144,7 +143,6 @@ RSpec.describe 'items index' do
       expect(items).to be_a(Hash)
       check_hash_structure(items, :data, Array)
       expect(items[:data].count).to eq(20)
-      expect(items[:data].pluck(:id).map(&:to_i)).to match_array(Item.first(20).pluck(:id))
     end
   end
 end

@@ -8,10 +8,14 @@ class MerchantSerializer
   end
 
   def self.merchant_hash(merchant)
-    { id: merchant.id.to_s,
-      type: 'merchant',
-      attributes: {
-        name: merchant.name
-      } }
+    if merchant
+      { id: merchant.id.to_s,
+        type: 'merchant',
+        attributes: {
+          name: merchant.name
+        } }
+    else
+      {}
+    end
   end
 end

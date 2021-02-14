@@ -43,6 +43,53 @@ RSpec.describe Item, type: :model do
         expect(selected).to eq([Item.last])
       end
     end
+
+    describe '.find_all_by_text' do
+      it 'finds a group of items using a search term' do
+        included_items = [create(:item, name: "Car"),
+                          create(:item, description: "Nascar flag")]
+        excluded_item = create(:item, name: 'pants', description: 'fancy pants')
+
+        expect(Item.find_all_by_text('car')).to match_array(included_items)
+      end
+    end
+
+    describe '.find_all_by_price' do
+      it 'finds a group of items by minimum price' do
+        included_items = [create(:item, unit_price: 1.99),
+                          create(:item, unit_price: 3.50)]
+        excluded_item = create(:item, unit_price: 1.50)
+
+        expect(Item.find_all_by_price(1.99, nil)).to match_array(included_items)
+      end
+
+      it 'finds a group of items by maximum price' do
+        included_items = [create(:item, unit_price: 1.99),
+                          create(:item, unit_price: 3.50)]
+        excluded_item = create(:item, unit_price: 4.50)
+
+        expect(Item.find_all_by_price(nil, 3.50)).to match_array(included_items)
+      end
+
+      it 'finds a group of items by minimum price and maximum price' do
+        included_items = [create(:item, unit_price: 5.00), create(:item, unit_price: 9.00)]
+        excluded_items = [create(:item, unit_price: 3.00), create(:item, unit_price: 10.00)]
+
+        expect(Item.find_all_by_price(4.99, 9.99)).to match_array(included_items)
+      end
+
+      it 'finds no items if minimum price is greater than maximim price' do
+        create_list(:item, 3)
+
+        expect(Item.find_all_by_price(9.99, 4.99)).to match_array([])
+      end
+
+      it 'returns all items if no prices are passed' do
+        create_list(:item, 3)
+
+        expect(Item.find_all_by_price(nil, nil)).to match_array(Item.all)
+      end
+    end
   end
 
   describe 'instance methods' do

@@ -35,5 +35,22 @@ RSpec.describe Merchant, type: :model do
         expect(selected).to eq([Merchant.last])
       end
     end
+
+    describe '.find_one' do
+      it 'finds a merchant using a search term' do
+        merchant = create(:merchant, name: "Ring World")
+        create(:merchant, name: "Bob's Burgers")
+
+        expect(Merchant.find_one('ring')).to eq(merchant)
+      end
+
+      it 'returns the first merchant in the database in case-sensitive alphabetical order if multiple matches are found' do
+        turing = create(:merchant, name: "Turing")
+        annies_rings = create(:merchant, name: "Annie's Rings")
+        ring_world = create(:merchant, name: "ring world")
+
+        expect(Merchant.find_one('ring')).to eq(annies_rings)
+      end
+    end
   end
 end
