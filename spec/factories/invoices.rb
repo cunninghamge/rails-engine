@@ -12,5 +12,13 @@ FactoryBot.define do
         end
       end
     end
+
+    factory :complete_invoice do
+      transient { result { 'success'} }
+      after(:create) do |invoice, evaluator|
+        create(:invoice_item, invoice: invoice, unit_price: 1, quantity: 1)
+        create(:transaction, invoice: invoice, result: evaluator.result)
+      end
+    end
   end
 end
