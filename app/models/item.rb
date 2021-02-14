@@ -14,8 +14,12 @@ class Item < ApplicationRecord
             .destroy_all
   end
 
-  def self.find_all(name)
+  def self.find_all_by_text(name)
     where('LOWER(name) LIKE ?', "%#{name.downcase}%")
     .or(where('LOWER(description) LIKE ?', "%#{name.downcase}%"))
+  end
+
+  def self.find_all_by_price(min_price, max_price)
+    where('unit_price BETWEEN ? AND ?', (min_price || 0), (max_price || Float::INFINITY))
   end
 end

@@ -48,7 +48,7 @@ RSpec.describe Item, type: :model do
       it 'finds a group of items using a search term' do
         included_items = [create(:item, name: "Car"),
                           create(:item, description: "Nascar flag")]
-        excluded_item = create(:item, name: 'pants')
+        excluded_item = create(:item, name: 'pants', description: 'fancy pants')
 
         expect(Item.find_all_by_text('car')).to match_array(included_items)
       end

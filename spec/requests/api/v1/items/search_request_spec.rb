@@ -3,10 +3,7 @@ require 'rails_helper'
 RSpec.describe 'items search' do
   describe 'accepts a name query param' do
     it 'finds a collection of items matching the search term' do
-      shirts = []
-      2.times do |n|
-        shirts << create(:item, name: 'Shirt' + n.to_s)
-      end
+      shirts = [create(:item, name: 'Shirt'), create(:item, name: 'T-shIrt')]
       pants = create(:item, name: 'pants')
 
       get "/api/v1/items/find_all?name=shirt"
@@ -129,10 +126,30 @@ RSpec.describe 'items search' do
   end
 
   it 'returns an error if both text and price parameters are sent' do
-    create_list(:items, 5)
+    create_list(:item, 5)
 
     get "/api/v1/items/find_all?max_price=9.99&min_price=4.99&name=pants"
 
     expect(response.status).to eq(400)
+
+    get "/api/v1/items/find_all?max_price=9.99&name=pants"
+
+    expect(response.status).to eq(400)
+
+    get "/api/v1/items/find_all?min_price=4.99&name=pants"
+
+    expect(response.status).to eq(400)
+  end
+
+  it 'returns all items if neither a text or a price parameter are sent' do
+    create_list(:item, 3)
+
+    get '/api/v1/items/find_all'
+
+    expect(response).to be_successful
+
+    items = JSON.parse(response.body, symbolize_names: true)
+
+    expect(items[:data].size).to eq(3)
   end
 end
