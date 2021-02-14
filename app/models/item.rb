@@ -22,4 +22,13 @@ class Item < ApplicationRecord
   def self.find_all_by_price(min_price, max_price)
     where('unit_price BETWEEN ? AND ?', (min_price || 0), (max_price || Float::INFINITY))
   end
+
+  def self.select_items_by_revenue(quantity)
+    select('items.*, SUM(quantity * invoice_items.unit_price) AS revenue')
+      .joins(invoices: :transactions)
+      .where(transactions: { result: 'success' }, invoices: { status: 'shipped' })
+      .group(:id)
+      .order('revenue' => :desc)
+      .limit(quantity || 10)
+  end
 end

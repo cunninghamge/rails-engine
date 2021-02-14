@@ -6,8 +6,8 @@ RSpec.describe ErrorSerializer do
 
     expect(error).to be_a(Hash)
     check_hash_structure(error, :message, String)
-    check_hash_structure(error, :errors, Array)
-    expect(error[:errors][0]).to eq("invalid request parameters")
+    check_hash_structure(error, :error, Array)
+    expect(error[:error][0]).to eq("invalid request parameters")
   end
 
   it 'invalid parameters' do
@@ -15,8 +15,8 @@ RSpec.describe ErrorSerializer do
 
     expect(error).to be_a(Hash)
     check_hash_structure(error, :message, String)
-    check_hash_structure(error, :errors, Array)
-    expect(error[:errors][0]).to be_a(String)
+    check_hash_structure(error, :error, Array)
+    expect(error[:error][0]).to be_a(String)
   end
 
   it 'record invalid' do
@@ -24,7 +24,7 @@ RSpec.describe ErrorSerializer do
 
     expect(error).to be_a(Hash)
     check_hash_structure(error, :message, String)
-    check_hash_structure(error, :errors, Array)
-    expect(error[:errors][0]).to be_a(String)
+    check_hash_structure(error, :error, Array)
+    expect(error[:error][0]).to be_a(String)
   end
 end

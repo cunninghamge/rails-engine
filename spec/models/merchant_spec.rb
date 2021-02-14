@@ -18,7 +18,7 @@ RSpec.describe Merchant, type: :model do
         create_list(:merchant, 21)
 
         selected = Merchant.select_records(nil, 2)
-        expect(selected).to eq([Merchant.last])
+        expect(selected.count).to eq(1)
       end
 
       it 'gets merchants using a per_page limit' do
