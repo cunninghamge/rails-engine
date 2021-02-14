@@ -7,4 +7,9 @@ class Api::V1::RevenueController < ApplicationController
       render json: RevenueSerializer.revenue_by_date(revenue)
     end
   end
+
+  def items
+    items = Item.select_items_by_revenue(params[:quantity])
+    render json: ItemSerializer.format_items_by_revenue(items)
+  end
 end

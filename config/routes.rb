@@ -7,12 +7,12 @@ Rails.application.routes.draw do
       end
 
       get 'items/find_all', to: 'items#find_all'
-      get 'items/revenue', to: 'items#revenue'
       resources :items do
         resource :merchant, only: :show
       end
-      
+
       get 'revenue', to: 'revenue#revenue'
+      get 'revenue/items', to: 'revenue#items'
     end
   end
 end

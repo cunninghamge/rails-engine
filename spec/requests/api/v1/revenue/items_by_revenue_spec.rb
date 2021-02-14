@@ -11,7 +11,7 @@ RSpec.describe 'find items by revenue' do
   end
 
   it 'returns a quantity of items ranked by descending revenue' do
-    get "/api/v1/items/revenue?quantity=5"
+    get "/api/v1/revenue/items?quantity=5"
 
     expect(response).to be_successful
 
@@ -38,7 +38,7 @@ RSpec.describe 'find items by revenue' do
   end
 
   it 'returns 10 items if a quantity is not specified' do
-    get "/api/v1/items/revenue"
+    get "/api/v1/revenue/items"
 
     expect(response).to be_successful
 
@@ -48,19 +48,19 @@ RSpec.describe 'find items by revenue' do
   end
 
   it 'returns an error if the quantity is not an integer' do
-    get "/api/v1/items/revenue?quantity=string"
+    get "/api/v1/revenue/items?quantity=string"
 
     expect(response.status).to eq(400)
   end
 
   it 'returns an error if the quantity is less than 0' do
-    get "/api/v1/items/revenue?quantity=-5"
+    get "/api/v1/revenue/items?quantity=-5"
 
     expect(response.status).to eq(400)
   end
 
   it 'returns an error if the quantity is blank' do
-    get "/api/v1/items/revenue?quantity="
+    get "/api/v1/revenue/items?quantity="
 
     expect(response.status).to eq(400)
   end

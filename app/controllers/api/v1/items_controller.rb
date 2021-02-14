@@ -39,11 +39,6 @@ class Api::V1::ItemsController < ApplicationController
     render json: ItemSerializer.format_items(items)
   end
 
-  def revenue
-    items = Item.select_items_by_revenue(params[:quantity])
-    render json: ItemSerializer.format_items_by_revenue(items)
-  end
-
   private
 
   def item_params
