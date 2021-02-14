@@ -100,21 +100,22 @@ RSpec.describe Item, type: :model do
           create(:transaction, invoice: invoice, result: 'success')
         end
       end
+
       it 'selects a specified quantity of items ranked by descending revenue' do
         items = Item.select_items_by_revenue(5)
 
-        expect(items.size).to eq(5)
-        expect(items[0].revenue).to eq(11)
-        expect(items[1].revenue).to eq(10)
-        expect(items[2].revenue).to eq(9)
-        expect(items[3].revenue).to eq(8)
-        expect(items[4].revenue).to eq(7)
+        expect(items.to_a.size).to eq(5)
+        expect(items[0].revenue).to eq(11.0)
+        expect(items[1].revenue).to eq(10.0)
+        expect(items[2].revenue).to eq(9.0)
+        expect(items[3].revenue).to eq(8.0)
+        expect(items[4].revenue).to eq(7.0)
       end
 
       it 'returns 10 items if no quantity is specified' do
         items = Item.select_items_by_revenue(nil)
 
-        expect(items.size).to eq(10)
+        expect(items.to_a.size).to eq(10)
       end
 
       it 'returns the specified number of items even if items have equal revenue' do
@@ -127,8 +128,8 @@ RSpec.describe Item, type: :model do
 
         items = Item.select_items_by_revenue(2)
 
-        expect(items.size).to eq(2)
-        expect(items.pluck(:revenue)).to eq([11.0, 11.0])
+        expect(items.to_a.size).to eq(2)
+        expect(items.map(&:revenue)).to eq([11.0, 11.0])
       end
     end
   end
