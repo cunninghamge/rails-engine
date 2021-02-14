@@ -26,7 +26,7 @@ class Item < ApplicationRecord
   def self.select_items_by_revenue(quantity)
     select('items.*, SUM(quantity * invoice_items.unit_price) AS revenue')
       .joins(invoices: :transactions)
-      .where(transactions: { result: 'success' }, invoices: {status: 'shipped'} )
+      .where(transactions: { result: 'success' }, invoices: { status: 'shipped' })
       .group(:id)
       .order('revenue' => :desc)
       .limit(quantity || 10)

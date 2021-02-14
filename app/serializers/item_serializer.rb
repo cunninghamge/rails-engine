@@ -8,7 +8,7 @@ class ItemSerializer
   end
 
   def self.format_items_by_revenue(items)
-    { data: items.map { |item| item_hash(item, 'item_revenue', {revenue: item.revenue}) } }
+    { data: items.map { |item| item_hash(item, 'item_revenue', { revenue: item.revenue }) } }
   end
 
   def self.item_hash(item, type = 'item', addl_attrs = {})

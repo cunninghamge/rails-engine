@@ -7,7 +7,6 @@ class ApplicationController < ActionController::API
   rescue_from TypeError, with: :render_invalid_parameters
   rescue_from ArgumentError, with: :render_invalid_parameters
 
-
   def render_invalid_parameters
     render json: ErrorSerializer.invalid_parameters, status: :bad_request
   end

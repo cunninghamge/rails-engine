@@ -16,7 +16,7 @@ class Invoice < ApplicationRecord
   def self.weekly_revenue
     select("DATE_TRUNC('week', invoices.created_at) week, SUM(quantity * unit_price) revenue")
       .joins(:invoice_items, :transactions)
-      .where(status: 'shipped', transactions: {result: 'success'})
+      .where(status: 'shipped', transactions: { result: 'success' })
       .group('week')
       .order('week')
   end
