@@ -12,4 +12,9 @@ class Api::V1::RevenueController < ApplicationController
     items = Item.select_items_by_revenue(params[:quantity])
     render json: ItemSerializer.format_items_by_revenue(items)
   end
+
+  def unshipped
+    orders = Invoice.unshipped_orders(params[:quantity])
+    render json: RevenueSerializer.unshipped_orders(orders)
+  end
 end

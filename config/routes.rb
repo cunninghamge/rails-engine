@@ -13,6 +13,7 @@ Rails.application.routes.draw do
 
       get 'revenue', to: 'revenue#revenue'
       get 'revenue/items', to: 'revenue#items'
+      get 'revenue/unshipped', to: 'revenue#unshipped'
     end
   end
 end
