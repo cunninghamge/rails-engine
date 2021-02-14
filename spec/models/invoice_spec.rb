@@ -22,11 +22,11 @@ RSpec.describe Invoice, type: :model do
         orders = Invoice.unshipped_orders(5)
 
         expect(orders.to_a.size).to eq(5)
-        expect(orders[0].revenue).to eq(11.0)
-        expect(orders[1].revenue).to eq(10.0)
-        expect(orders[2].revenue).to eq(9.0)
-        expect(orders[3].revenue).to eq(8.0)
-        expect(orders[4].revenue).to eq(7.0)
+        expect(orders[0].potential_revenue).to eq(11.0)
+        expect(orders[1].potential_revenue).to eq(10.0)
+        expect(orders[2].potential_revenue).to eq(9.0)
+        expect(orders[3].potential_revenue).to eq(8.0)
+        expect(orders[4].potential_revenue).to eq(7.0)
       end
 
       it 'returns 10 invoices if no quantity is specified' do
