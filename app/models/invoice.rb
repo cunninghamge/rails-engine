@@ -12,4 +12,12 @@ class Invoice < ApplicationRecord
       .order('potential_revenue' => :desc)
       .limit(quantity || 10)
   end
+
+  def self.weekly_revenue
+    select("DATE_TRUNC('week', invoices.created_at) week, SUM(quantity * unit_price) revenue")
+      .joins(:invoice_items, :transactions)
+      .where(status: 'shipped', transactions: {result: 'success'})
+      .group('week')
+      .order('revenue' => :desc)
+    end
 end
