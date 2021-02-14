@@ -14,10 +14,11 @@ RSpec.describe 'total revenue over a given date range' do
     check_hash_structure(body, :data, Hash)
     expect(body[:data]).to have_key(:id)
     expect(body[:data][:id]).to be_nil
+    check_hash_structure(body[:data], :type, String)
     check_hash_structure(body[:data], :attributes, Hash)
     check_hash_structure(body[:data][:attributes], :revenue, Float)
-    expect(body[:data][:attributes][:revenue]).to eq(3)
-    expect(body[:data].keys).to match_array(%i[id attributes])
+    expect(body[:data][:attributes][:revenue]).to eq(1.0)
+    expect(body[:data].keys).to match_array(%i[id type attributes])
     expect(body[:data][:attributes].keys).to match_array(%i[revenue])
   end
 

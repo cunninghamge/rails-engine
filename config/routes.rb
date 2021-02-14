@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       resources :items do
         resource :merchant, only: :show
       end
+      get 'revenue', to: 'revenue#revenue'
     end
   end
 end
