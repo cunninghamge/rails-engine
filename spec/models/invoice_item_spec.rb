@@ -7,7 +7,7 @@ RSpec.describe InvoiceItem, type: :model do
   end
 
   describe 'class methods' do
-    it '.total_revenue' do
+    it '.total_revenue_by_date' do
     #   #complete invoices have a transaction that is successful unless specified otherwise and a revenue of 1.00
       create(:complete_invoice, status: 'shipped', created_at: '2012-03-09')
       create(:complete_invoice, status: 'shipped', created_at: '2012-03-10')
@@ -20,7 +20,7 @@ RSpec.describe InvoiceItem, type: :model do
       create(:complete_invoice, result: 'refunded', status: 'shipped', created_at: '2012-03-10')
       create(:complete_invoice, result: 'failed', status: 'shipped', created_at: '2012-03-10')
 
-      expect(InvoiceItems.total_revenue).to eq(3.0)
+      expect(InvoiceItem.total_revenue_by_date('2012-03-09', '2012-03-11')).to eq(3.0)
     end
   end
 end
