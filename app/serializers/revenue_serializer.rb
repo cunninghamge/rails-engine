@@ -18,5 +18,17 @@ class RevenueSerializer
         end
       }
     end
+
+    def weekly_revenue(weekly_totals)
+      { data: weekly_totals.map do |weekly_total|
+        { id: nil,
+          type: 'weekly_revenue',
+          attributes: {
+            week: weekly_total.week.to_date.to_s,
+            revenue: weekly_total.revenue
+          } }
+        end
+      }
+    end
   end
 end

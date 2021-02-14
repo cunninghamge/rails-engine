@@ -18,6 +18,6 @@ class Invoice < ApplicationRecord
       .joins(:invoice_items, :transactions)
       .where(status: 'shipped', transactions: {result: 'success'})
       .group('week')
-      .order('revenue' => :desc)
-    end
+      .order('week')
+  end
 end

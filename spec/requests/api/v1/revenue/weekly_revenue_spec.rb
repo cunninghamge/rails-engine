@@ -5,7 +5,7 @@ RSpec.describe 'weekly revenue report' do
     create(:complete_invoice, created_at: "2021-01-07", revenue: 1.0)
     create(:complete_invoice, created_at: "2021-01-14", revenue: 2.0)
     create(:complete_invoice, created_at: "2021-01-21", revenue: 3.0)
-    create(:complete_invoice, created_at: "2021-01-22", revenue: 4.0)
+    create(:complete_invoice, created_at: "2021-01-28", revenue: 4.0)
 
     get '/api/v1/revenue/weekly'
 
