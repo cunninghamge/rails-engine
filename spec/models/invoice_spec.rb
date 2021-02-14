@@ -35,5 +35,25 @@ RSpec.describe Invoice, type: :model do
         expect(orders.to_a.size).to eq(10)
       end
     end
+
+    describe '.weekly_revenue' do
+      it 'calculates revenue by week' do
+        28.times do |n|
+          create(:complete_invoice, created_at: "2021-02-#{sprintf('%02d', n + 1)}", revenue: n + 1)
+        end
+
+        totals = Invoice.weekly_revenue
+
+        expect(totals.to_a.size).to eq(4)
+        expect(totals[0].week).to eq("2021-02-22")
+        expect(totals[0].revenue).to eq(175.0)
+        expect(totals[1].week).to eq("2021-02-15")
+        expect(totals[1].revenue).to eq(126.0)
+        expect(totals[2].week).to eq("2021-02-08")
+        expect(totals[2].revenue).to eq(77.0)
+        expect(totals[3].week).to eq("2021-02-01")
+        expect(totals[3].revenue).to eq(28.0)
+      end
+    end
   end
 end
