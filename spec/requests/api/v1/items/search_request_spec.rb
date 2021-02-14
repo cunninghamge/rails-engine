@@ -3,8 +3,9 @@ require 'rails_helper'
 RSpec.describe 'items search' do
   describe 'accepts a name query param' do
     it 'finds a collection of items matching the search term' do
-      shirts = 2.times do |n|
-        create(:item, name: 'Shirt' + n.to_s)
+      shirts = []
+      2.times do |n|
+        shirts << create(:item, name: 'Shirt' + n.to_s)
       end
       pants = create(:item, name: 'pants')
 

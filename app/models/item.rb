@@ -13,4 +13,9 @@ class Item < ApplicationRecord
             .having("'{#{id}}' = (ARRAY_AGG(DISTINCT item_id))")
             .destroy_all
   end
+
+  def self.find_all(name)
+    where('LOWER(name) LIKE ?', "%#{name.downcase}%")
+    .or(where('LOWER(description) LIKE ?', "%#{name.downcase}%"))
+  end
 end
