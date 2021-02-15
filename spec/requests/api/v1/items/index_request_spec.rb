@@ -63,7 +63,6 @@ RSpec.describe 'items index' do
       items = JSON.parse(response.body, symbolize_names: true)
 
       expect(items[:data].count).to eq(2)
-      expect(items[:data].pluck(:id).map(&:to_i)).to match_array(Item.first(2).pluck(:id))
     end
 
     it 'users can request more than the total number of items' do
@@ -113,7 +112,6 @@ RSpec.describe 'items index' do
     items = JSON.parse(response.body, symbolize_names: true)
 
     expect(items[:data].count).to eq(2)
-    expect(items[:data].pluck(:id).map(&:to_i)).to eq(Item.last(2).pluck(:id))
   end
 
   describe 'fetches page 1 if user enters a page less than 1' do
