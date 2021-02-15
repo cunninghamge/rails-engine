@@ -22,4 +22,13 @@ class Api::V1::RevenueController < ApplicationController
     totals = Invoice.weekly_revenue
     render json: RevenueSerializer.weekly_revenue(totals)
   end
+
+  def merchants
+    if params[:quantity]
+      merchants = Merchant.top_merchants(params[:quantity])
+      render json: MerchantSerializer.format_merchants_by_revenue(merchants)
+    else
+      render_invalid_parameters
+    end
+  end
 end
