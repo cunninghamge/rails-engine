@@ -1,7 +1,7 @@
 class Api::V1::MerchantsController < ApplicationController
   def index
     merchants = Merchant.select_records(params[:per_page], params[:page])
-    render json: MerchantSerializer.format_merchants(merchants)
+    render json: MerchantSerializer.new(merchants)
   end
 
   def show
@@ -10,11 +10,15 @@ class Api::V1::MerchantsController < ApplicationController
                else
                  Merchant.find(params[:id])
                end
-    render json: MerchantSerializer.format_merchant(merchant)
+    render json: MerchantSerializer.new(merchant)
   end
 
   def find
     merchant = Merchant.find_one(params[:name]) if params[:name]
-    render json: MerchantSerializer.format_merchant(merchant)
+    if merchant
+      render json: MerchantSerializer.new(merchant)
+    else
+      render json: { data: {} }
+    end
   end
 end

@@ -26,7 +26,7 @@ class Api::V1::RevenueController < ApplicationController
   def merchants
     if params[:quantity]
       merchants = Merchant.top_merchants(params[:quantity])
-      render json: MerchantSerializer.format_merchants_by_revenue(merchants)
+      render json: MerchantRevenueSerializer.new(merchants)
     else
       render_invalid_parameters
     end
