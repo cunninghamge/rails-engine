@@ -1,22 +1,10 @@
 class ErrorSerializer
-  def self.invalid_parameters
-    { 'message': 'your request could not be completed',
-      'error': [
-        'invalid request parameters'
-      ] }
+  def initialize(errors)
+    @errors = [errors]
   end
 
-  def self.record_not_found(error)
+  def serialize
     { 'message': 'your request could not be completed',
-      'error': [
-        error
-      ] }
-  end
-
-  def self.record_invalid(error)
-    { 'message': 'your request could not be completed',
-      'error': [
-        error
-      ] }
+      'error': @errors }
   end
 end
