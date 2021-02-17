@@ -19,36 +19,36 @@ RSpec.describe Item, type: :model do
         create_list(:item, 21)
 
         selected = Item.select_records(nil, nil)
-        expect(selected).to eq(Item.first(20))
+        expect(selected.to_a.size).to eq(20)
       end
 
       it 'gets items when passed a page number' do
         create_list(:item, 21)
 
         selected = Item.select_records(nil, 2)
-        expect(selected).to eq([Item.last])
+        expect(selected.to_a.size).to eq(1)
       end
 
       it 'gets items using a per_page limit' do
         create_list(:item, 3)
 
         selected = Item.select_records(2, nil)
-        expect(selected).to eq(Item.first(2))
+        expect(selected.to_a.size).to eq(2)
       end
 
       it 'gets items using both a page number and a per_page limit' do
         create_list(:item, 3)
 
         selected = Item.select_records(2, 2)
-        expect(selected).to eq([Item.last])
+        expect(selected.to_a.size).to eq(1)
       end
     end
 
     describe '.find_all_by_text' do
       it 'finds a group of items using a search term' do
         included_items = [create(:item, name: "Car"),
-                          create(:item, description: "Nascar flag")]
-        excluded_item = create(:item, name: 'pants', description: 'fancy pants')
+                          create(:item, name: "Nascar flag")]
+        excluded_item = create(:item, name: 'pants')
 
         expect(Item.find_all_by_text('car')).to match_array(included_items)
       end
@@ -88,6 +88,52 @@ RSpec.describe Item, type: :model do
         create_list(:item, 3)
 
         expect(Item.find_all_by_price(nil, nil)).to match_array(Item.all)
+      end
+    end
+
+    describe '.search_by_text' do
+      it 'finds one item using a search term' do
+        nascar = create(:item, name: "Nascar flag")
+        car = create(:item, name: "Car")
+        carpet = create(:item, name: "carpet")
+        excluded_item = create(:item, name: 'pants')
+
+        expect(Item.search_by_text('car')).to eq(Item.find(car.id))
+      end
+    end
+
+    describe '.search_by_price' do
+      it 'finds one item by minimum price' do
+        included_item = create(:item, unit_price: 1.99)
+        excluded_item = create(:item, unit_price: 1.50)
+
+        expect(Item.search_by_price(1.99, nil)).to eq(Item.find(included_item.id))
+      end
+
+      it 'finds one item by maximum price' do
+        included_item = create(:item, unit_price: 1.99)
+        excluded_item = create(:item, unit_price: 4.50)
+
+        expect(Item.search_by_price(nil, 3.50)).to eq(Item.find(included_item.id))
+      end
+
+      it 'finds one item by minimum price and maximum price' do
+        included_item = create(:item, unit_price: 5.00)
+        excluded_items = [create(:item, unit_price: 3.00), create(:item, unit_price: 10.00)]
+
+        expect(Item.search_by_price(4.99, 9.99)).to eq(Item.find(included_item.id))
+      end
+
+      it 'finds no items if minimum price is greater than maximim price' do
+        create_list(:item, 3)
+
+        expect(Item.search_by_price(9.99, 4.99)).to be_nil
+      end
+
+      it 'returns any item if no prices are passed' do
+        items = create_list(:item, 3)
+
+        expect(items.pluck(:id)).to include(Item.search_by_price(nil, nil).id)
       end
     end
 

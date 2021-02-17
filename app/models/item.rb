@@ -15,20 +15,31 @@ class Item < ApplicationRecord
   end
 
   def self.find_all_by_text(name)
+    return [] if name.blank?
+
     where('LOWER(name) LIKE ?', "%#{name.downcase}%")
-      .or(where('LOWER(description) LIKE ?', "%#{name.downcase}%"))
+  end
+
+  def self.search_by_text(name)
+    return nil if name.blank?
+
+    where('LOWER(name) LIKE ?', "%#{name.downcase}%").order(:name).first
   end
 
   def self.find_all_by_price(min_price, max_price)
     where('unit_price BETWEEN ? AND ?', (min_price || 0), (max_price || Float::INFINITY))
   end
 
+  def self.search_by_price(min_price, max_price)
+    find_by('unit_price BETWEEN ? AND ?', (min_price || 0), (max_price || Float::INFINITY))
+  end
+
   def self.select_items_by_revenue(quantity)
-    select('items.*, SUM(quantity * invoice_items.unit_price) AS revenue')
-      .joins(invoices: :transactions)
-      .where(transactions: { result: 'success' }, invoices: { status: 'shipped' })
+    joins(invoices: :transactions)
+      .where(invoices: { status: :shipped }, transactions: { result: :success })
+      .select('items.*, SUM(quantity * invoice_items.unit_price) revenue')
       .group(:id)
-      .order('revenue' => :desc)
+      .order(revenue: :desc)
       .limit(quantity || 10)
   end
 end

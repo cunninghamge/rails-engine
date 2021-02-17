@@ -10,7 +10,7 @@ class Api::V1::RevenueController < ApplicationController
 
   def items
     items = Item.select_items_by_revenue(params[:quantity])
-    render json: ItemSerializer.format_items_by_revenue(items)
+    render json: ItemRevenueSerializer.new(items)
   end
 
   def unshipped
@@ -21,5 +21,19 @@ class Api::V1::RevenueController < ApplicationController
   def weekly
     totals = Invoice.weekly_revenue
     render json: RevenueSerializer.weekly_revenue(totals)
+  end
+
+  def merchants
+    if params[:quantity]
+      merchants = Merchant.top_merchants(params[:quantity])
+      render json: MerchantNameRevenueSerializer.new(merchants)
+    else
+      render_invalid_parameters
+    end
+  end
+
+  def merchant_revenue
+    merchant = Merchant.find(params[:id])
+    render json: MerchantRevenueSerializer.new(merchant)
   end
 end
