@@ -128,11 +128,22 @@ RSpec.describe Merchant, type: :model do
         5.times do |n|
           item = create(:item, merchant: merchant)
           invoice = create(:invoice, merchant: merchant, status: 'shipped')
-          create(:invoice_item, invoice: invoice, item: item, unit_price: 1.0, quantity: n + 1)
+          create(:invoice_item, invoice: invoice, item: item, unit_price: 1.0, quantity: 1)
           create(:transaction, invoice: invoice, result: 'success')
         end
 
-        expect(merchant.total_revenue).to eq(15)
+        item = create(:item, merchant: merchant)
+        invoice = create(:invoice, merchant: merchant, status: 'shipped')
+        create(:invoice_item, invoice: invoice, item: item, unit_price: 1.0, quantity: 10)
+        create(:transaction, invoice: invoice, result: 'failed')
+
+        item = create(:item, merchant: merchant)
+        invoice = create(:invoice, merchant: merchant, status: 'packaged')
+        create(:invoice_item, invoice: invoice, item: item, unit_price: 1.0, quantity: 10)
+        create(:transaction, invoice: invoice, result: 'success')
+
+        result = merchant.total_revenue
+        expect(merchant.total_revenue).to eq(5)
       end
     end
   end

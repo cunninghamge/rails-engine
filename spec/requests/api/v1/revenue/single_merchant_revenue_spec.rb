@@ -2,17 +2,17 @@ require 'rails_helper'
 
 RSpec.describe "revenue for a single merchant" do
   before(:each) do
-    @merchant = create(:merchant)
+    @id = create(:merchant).id
     5.times do |n|
-      item = create(:item, merchant: merchant)
-      invoice = create(:invoice, merchant: merchant, status: 'shipped')
+      item = create(:item, merchant_id: @id)
+      invoice = create(:invoice, merchant_id: @id, status: 'shipped')
       create(:invoice_item, invoice: invoice, item: item, unit_price: 1.0, quantity: n + 1)
       create(:transaction, invoice: invoice, result: 'success')
     end
   end
 
   it 'gets revenue for a single merchant' do
-    get "api/v1/revenue/merchants/#{@merchant.id}"
+    get "/api/v1/revenue/merchants/#{@id}"
 
     expect(response).to be_successful
 
@@ -31,7 +31,7 @@ RSpec.describe "revenue for a single merchant" do
   end
 
   it 'returns an error if the merchant does not exist' do
-    get "api/v1/revenue/merchants/9999999"
+    get "/api/v1/revenue/merchants/9999999"
 
     expect(response.status).to eq(404)
   end
