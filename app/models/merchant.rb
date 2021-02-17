@@ -20,6 +20,6 @@ class Merchant < ApplicationRecord
     .where(invoices: { status: :shipped }, transactions: { result: :success })
     .group(:id)
     .order(sales_count: :desc)
-    .limit(quantity || 5)
+    .limit(quantity)
   end
 end

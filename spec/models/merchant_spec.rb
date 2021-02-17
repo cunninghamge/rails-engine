@@ -117,12 +117,6 @@ RSpec.describe Merchant, type: :model do
 
         expect(merchants.to_a.size).to eq(3)
       end
-
-      it 'finds 5 merchants if a quantity is not specified' do
-        merchants = Merchant.select_by_item_sales(nil)
-
-        expect(merchants.to_a.size).to eq(5)
-      end
     end
   end
 end

@@ -37,14 +37,10 @@ RSpec.describe 'find merchants by item quantity sold' do
     end
   end
 
-  it 'defaults to 5 if the quantity is not specified' do
+  it 'returns an error if the quantity is not specified' do
     get "/api/v1/merchants/most_items"
 
-    expect(response).to be_successful
-
-    merchants = JSON.parse(response.body, symbolize_names: true)
-
-    expect(merchants[:data].count).to eq(5)
+    expect(response.status).to eq(400)
   end
 
   it 'can return less than 5 merchants' do
