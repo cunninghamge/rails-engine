@@ -20,8 +20,18 @@ class Item < ApplicationRecord
     where('LOWER(name) LIKE ?', "%#{name.downcase}%")
   end
 
+  def self.search_by_text(name)
+    return nil if name.blank?
+
+    where('LOWER(name) LIKE ?', "%#{name.downcase}%").order(:name).first
+  end
+
   def self.find_all_by_price(min_price, max_price)
     where('unit_price BETWEEN ? AND ?', (min_price || 0), (max_price || Float::INFINITY))
+  end
+
+  def self.search_by_price(min_price, max_price)
+    find_by('unit_price BETWEEN ? AND ?', (min_price || 0), (max_price || Float::INFINITY))
   end
 
   def self.select_items_by_revenue(quantity)

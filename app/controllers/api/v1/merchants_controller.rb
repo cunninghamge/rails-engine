@@ -15,11 +15,7 @@ class Api::V1::MerchantsController < ApplicationController
 
   def find
     merchant = Merchant.find_one(params[:name]) if params[:name]
-    if merchant
-      render json: MerchantSerializer.new(merchant)
-    else
-      render json: { data: {} }
-    end
+    render json: (merchant ? MerchantSerializer.new(merchant) : { data: {} })
   end
 
   def find_all

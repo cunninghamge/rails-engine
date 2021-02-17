@@ -40,6 +40,18 @@ class Api::V1::ItemsController < ApplicationController
     end
   end
 
+  def find
+    if params[:name] && (params[:min_price] || params[:max_price])
+      render_invalid_parameters
+    elsif params[:name]
+      item = Item.search_by_text(params[:name])
+      render json: (item ? ItemSerializer.new(item) : { data: {} })
+    else
+      item = Item.search_by_price(params[:min_price], params[:max_price])
+      render json: (item ? ItemSerializer.new(item) : { data: {} })
+    end
+  end
+
   private
 
   def item_params

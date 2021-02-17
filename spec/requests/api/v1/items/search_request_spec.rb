@@ -165,7 +165,7 @@ RSpec.describe 'items search' do
 
         expect(response).to be_successful
 
-        items = JSON.parse(response.body, symbolize_names: true)
+        item = JSON.parse(response.body, symbolize_names: true)
 
         expect(item).to be_a(Hash)
         check_hash_structure(item, :data, Hash)
@@ -187,14 +187,14 @@ RSpec.describe 'items search' do
 
         expect(response).to be_successful
 
-        items = JSON.parse(response.body, symbolize_names: true)
+        item = JSON.parse(response.body, symbolize_names: true)
 
-        expect(items).to be_a(Hash)
-        check_hash_structure(items, :data, Hash)
-        expect(items[:data]).to be_empty
+        expect(item).to be_a(Hash)
+        check_hash_structure(item, :data, Hash)
+        expect(item[:data]).to be_empty
       end
 
-      it 'returns an empty array if no fragment is given' do
+      it 'returns an empty hash if no fragment is given' do
         create(:item)
 
         get "/api/v1/items/find?name="
@@ -204,7 +204,7 @@ RSpec.describe 'items search' do
         items = JSON.parse(response.body, symbolize_names: true)
 
         expect(items).to be_a(Hash)
-        check_hash_structure(items, :data, Array)
+        check_hash_structure(items, :data, Hash)
         expect(items[:data]).to be_empty
       end
     end
@@ -246,7 +246,7 @@ RSpec.describe 'items search' do
 
         items = JSON.parse(response.body, symbolize_names: true)
 
-        expect(included_items.pluck(:id)).to include(items[:data][:id])
+        expect(included_items.pluck(:id)).to include(items[:data][:id].to_i)
       end
     end
 
@@ -275,7 +275,7 @@ RSpec.describe 'items search' do
 
       result = JSON.parse(response.body, symbolize_names: true)
 
-      expect(items.pluck(:id)).to include(result[:data][:id])
+      expect(items.pluck(:id)).to include(result[:data][:id].to_i)
     end
   end
 end

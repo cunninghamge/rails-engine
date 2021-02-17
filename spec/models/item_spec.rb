@@ -91,49 +91,49 @@ RSpec.describe Item, type: :model do
       end
     end
 
-    describe '.find_by_text' do
+    describe '.search_by_text' do
       it 'finds one item using a search term' do
         nascar = create(:item, name: "Nascar flag")
         car = create(:item, name: "Car")
         carpet = create(:item, name: "carpet")
         excluded_item = create(:item, name: 'pants')
 
-        expect(Item.find_by_text('car')).to eq(Item.find(car.id))
+        expect(Item.search_by_text('car')).to eq(Item.find(car.id))
       end
     end
 
-    describe '.find_by_price' do
+    describe '.search_by_price' do
       it 'finds one item by minimum price' do
         included_item = create(:item, unit_price: 1.99)
         excluded_item = create(:item, unit_price: 1.50)
 
-        expect(Item.find_by_price(1.99, nil)).to eq(Item.find(included_item.id))
+        expect(Item.search_by_price(1.99, nil)).to eq(Item.find(included_item.id))
       end
 
       it 'finds one item by maximum price' do
         included_item = create(:item, unit_price: 1.99)
         excluded_item = create(:item, unit_price: 4.50)
 
-        expect(Item.find_by_price(nil, 3.50)).to eq(Item.find(included_item.id))
+        expect(Item.search_by_price(nil, 3.50)).to eq(Item.find(included_item.id))
       end
 
       it 'finds one item by minimum price and maximum price' do
         included_item = create(:item, unit_price: 5.00)
         excluded_items = [create(:item, unit_price: 3.00), create(:item, unit_price: 10.00)]
 
-        expect(Item.find_by_price(4.99, 9.99)).to eq(Item.find(included_item.id))
+        expect(Item.search_by_price(4.99, 9.99)).to eq(Item.find(included_item.id))
       end
 
       it 'finds no items if minimum price is greater than maximim price' do
         create_list(:item, 3)
 
-        expect(Item.find_by_price(9.99, 4.99)).to match_array([])
+        expect(Item.search_by_price(9.99, 4.99)).to be_nil
       end
 
       it 'returns any item if no prices are passed' do
-        create_list(:item, 3)
+        items = create_list(:item, 3)
 
-        expect(items.pluck(:id)).to include(Item.find_by_price(nil, nil).id)
+        expect(items.pluck(:id)).to include(Item.search_by_price(nil, nil).id)
       end
     end
 
