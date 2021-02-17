@@ -21,4 +21,13 @@ class Api::V1::MerchantsController < ApplicationController
       render json: { data: {} }
     end
   end
+
+  def most_items
+    if params[:quantity] && params[:quantity].to_i <= 0
+      render_invalid_parameters
+    else
+      merchants = Merchant.select_by_item_sales(params[:quantity])
+      render json: MerchantSalesSerializer.new(merchants)
+    end
+  end
 end

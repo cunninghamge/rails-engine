@@ -97,6 +97,7 @@ RSpec.describe Merchant, type: :model do
             create(:transaction, invoice: invoice, result: 'success')
           end
         end
+      end
 
       it 'finds a specified quantity of merchants' do
         merchants = Merchant.select_by_item_sales(7)

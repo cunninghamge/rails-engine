@@ -8,9 +8,18 @@ class Merchant < ApplicationRecord
   def self.top_merchants(quantity)
     select('merchants.*, SUM(quantity * invoice_items.unit_price) revenue')
       .joins(items: { invoice_items: { invoice: :transactions } })
-      .where(invoices: { status: 'shipped' }, transactions: { result: 'success' })
+      .where(invoices: { status: :shipped }, transactions: { result: :success })
       .group(:id)
-      .order('revenue' => :desc)
+      .order(revenue: :desc)
       .limit(quantity)
+  end
+
+  def self.select_by_item_sales(quantity)
+    select('merchants.*, SUM(quantity) sales_count')
+    .joins(items: { invoice_items: { invoice: :transactions } })
+    .where(invoices: { status: :shipped }, transactions: { result: :success })
+    .group(:id)
+    .order(sales_count: :desc)
+    .limit(quantity || 5)
   end
 end
