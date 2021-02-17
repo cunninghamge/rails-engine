@@ -54,6 +54,16 @@ RSpec.describe Merchant, type: :model do
       end
     end
 
+    describe '.find_all' do
+      it 'finds a group of merchants using a search term' do
+        crafts = [create(:merchant, name: "Handicraft World"),
+                  create(:merchant, name: "The Craft Guy")]
+        ring_world = create(:merchant, name: "Ring World")
+
+        expect(Merchant.find_all('craft')).to match_array(crafts)
+      end
+    end
+
     describe '.top_merchants' do
       before(:each) do
         6.times do |n|
