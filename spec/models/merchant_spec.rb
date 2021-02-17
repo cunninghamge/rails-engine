@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe Merchant, type: :model do
   describe 'relationships' do
     it { should have_many :items }
+    it { should have_many(:invoice_items).through(:items) }
   end
 
   describe 'class methods' do
@@ -121,7 +122,7 @@ RSpec.describe Merchant, type: :model do
   end
 
   describe 'instance methods' do
-    describe '#merchant_revenue' do
+    describe '#total_revenue' do
       it 'returns the merchant with their total revenue' do
         merchant = create(:merchant)
         5.times do |n|
@@ -131,7 +132,7 @@ RSpec.describe Merchant, type: :model do
           create(:transaction, invoice: invoice, result: 'success')
         end
 
-        expect(merchant.merchant_revenue).to eq(15)
+        expect(merchant.total_revenue).to eq(15)
       end
     end
   end

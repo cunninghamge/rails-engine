@@ -1,5 +1,8 @@
 class Merchant < ApplicationRecord
   has_many :items, dependent: :destroy
+  has_many :invoice_items, through: :items
+
+  delegate :total_revenue, to: :invoice_items
 
   def self.find_one(query)
     where('LOWER(name) LIKE ?', "%#{query.downcase}%").order(:name).first
