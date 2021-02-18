@@ -4,20 +4,10 @@ class Merchant < ApplicationRecord
 
   delegate :total_revenue, to: :invoice_items
 
-  def self.find_one(query)
-    where('LOWER(name) LIKE ?', "%#{query.downcase}%").order(:name).first
-  end
-
-  def self.find_all(name)
-    return [] if name.blank?
-
-    where('LOWER(name) LIKE ?', "%#{name.downcase}%")
-  end
-
   def self.top_merchants(quantity)
     select('merchants.*, SUM(quantity * invoice_items.unit_price) revenue')
-      .joins(items: { invoice_items: { invoice: :transactions } })
-      .where(invoices: { status: :shipped }, transactions: { result: :success })
+      .joins(items: { invoice_items: :invoice })
+      .merge(Invoice.completed)
       .group(:id)
       .order(revenue: :desc)
       .limit(quantity)
@@ -25,7 +15,7 @@ class Merchant < ApplicationRecord
 
   def self.select_by_item_sales(quantity)
     select('merchants.*, SUM(quantity) sales_count')
-      .joins(items: { invoice_items: :invoice } )
+      .joins(items: { invoice_items: :invoice })
       .merge(Invoice.completed)
       .group(:id)
       .order(sales_count: :desc)

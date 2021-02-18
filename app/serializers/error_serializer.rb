@@ -4,7 +4,7 @@ class ErrorSerializer
   end
 
   def serialize
-    { 'message': 'your request could not be completed',
-      'error': @errors }
+    { message: 'your request could not be completed',
+      error: @errors }
   end
 end
