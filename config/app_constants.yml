@@ -1,0 +1,169 @@
+---
+:merchants:
+- :method: GET
+  :url: "/api/v1/merchants"
+  :description: get the primary data of all merchants
+  :query_params:
+  - :name: :per_page
+    :data_type: :integer
+    :description: the number of resources to return per page; defaults to 20
+    :optional: :optional
+  - :name: :page
+    :data_type: :integer
+    :description: which page to query
+    :optional: :optional
+- :method: GET
+  :url: "/api/v1/merchants/:id"
+  :description: get details about a single merchant by id
+  :query_params: []
+- :method: GET
+  :url: "/api/v1/merchants/find"
+  :description: search for a single merchant by name
+  :query_params:
+  - :name: :name
+    :data_type: :string
+    :description: case-insensitive search term; includes partial matches
+    :optional: :optional
+- :method: GET
+  :url: "/api/v1/merchants/find_all"
+  :description: search for all merchants with names matching a search term
+  :query_params:
+  - :name: :name
+    :data_type: :string
+    :description: case-insensitive search term; includes partial matches
+    :optional: :optional
+- :method: GET
+  :url: "/api/v1/merchants/:merchant_id/items"
+  :description: get all items associated with a merchant
+  :query_params: []
+:items:
+- :method: GET
+  :url: "/api/v1/items"
+  :description: get the primary data of all items
+  :query_params:
+  - :name: :per_page
+    :data_type: :integer
+    :description: the number of resources to return per page; defaults to 20
+    :optional: :optional
+  - :name: :page
+    :data_type: :integer
+    :description: which page to query
+    :optional: :optional
+- :method: GET
+  :url: "/api/v1/items/:id"
+  :description: get details about a single item by id
+  :query_params: []
+- :method: GET
+  :url: "/api/v1/items/find"
+  :description: search for a single item by name OR price; price queries can include
+    min_price and/or max_price, but cannot be combined with a name query
+  :query_params:
+  - :name: :name
+    :data_type: :string
+    :description: case-insensitive search term; includes partial matches
+    :optional: :optional
+  - :name: :min_price
+    :data_type: :float
+    :description: minimum price; returns items with prices greater than or equal to
+      the specified amount
+    :optional: :optional
+  - :name: :max_price
+    :data_type: :float
+    :description: maximum price; returns items with prices less or equal to the specified
+      amount
+    :optional: :optional
+- :method: GET
+  :url: "/api/v1/items/find_all"
+  :description: search for multiple items by name OR price; price queries can include
+    min_price and/or max_price, but cannot be combined with a name query
+  :query_params:
+  - :name: :name
+    :data_type: :string
+    :description: case-insensitive search term; includes partial matches
+    :optional: :optional
+  - :name: :min_price
+    :data_type: :float
+    :description: minimum price; returns items with prices greater than or equal to
+      the specified amount
+    :optional: :optional
+  - :name: :max_price
+    :data_type: :float
+    :description: maximum price; returns items with prices less or equal to the specified
+      amount
+    :optional: :optional
+- :method: POST
+  :url: "/api/v1/items"
+  :description: create an item; name, description, unit price, and merchant id are
+    required.
+  :query_params: []
+- :method: PUT
+  :url: "/api/v1/items/:id"
+  :description: update an item
+  :query_params: []
+- :method: DELETE
+  :url: "/api/v1/items/:id"
+  :description: delete an item
+  :query_params: []
+- :method: GET
+  :url: "/api/v1/items/:item_id/merchant"
+  :description: get the merchant associated with an item
+  :query_params: []
+:analysis:
+- :method: GET
+  :url: "/api/v1/revenue/merchants"
+  :description: find a specified number of merchants ranked by total revenue in descending
+    order
+  :query_params:
+  - :name: :quantity
+    :data_type: :integer
+    :description: the number of results to be returned
+    :optional: :required
+- :method: GET
+  :url: "/api/v1/merchants/most_items"
+  :description: find a specified number of merchants ranked by total number of items
+    sold in descending order
+  :query_params:
+  - :name: :quantity
+    :data_type: :integer
+    :description: the number of results to be returned
+    :optional: :optional
+- :method: GET
+  :url: "/api/v1/revenue/merchants/:id"
+  :description: get the total revenue for a given merchant
+  :query_params: []
+- :method: GET
+  :url: "/api/v1/revenue/items"
+  :description: find a specified quantity of items ranked by descending revenue
+  :query_params:
+  - :name: :quantity
+    :data_type: :integer
+    :description: the number of results to be returned
+    :optional: :optional
+- :method: GET
+  :url: "/api/v1/revenue/unshipped"
+  :description: find the potential revenue of unshipped orders
+  :query_params:
+  - :name: :quantity
+    :data_type: :integer
+    :description: the number of results to be returned; defaults to 10 if not specified
+    :optional: :optional
+- :method: GET
+  :url: "/api/v1/revenue"
+  :description: find the total revenue across all merchants between the given dates,
+    inclusive of the start and end date
+  :query_params:
+  - :name: :start
+    :data_type: :string
+    :description: the first date for which revenue should be included; must be formatted
+      'YYYY-MM-DD'
+    :optional: :required
+  - :name: :end
+    :data_type: :string
+    :description: the first date for which revenue should be included; must be formatted
+      'YYYY-MM-DD'
+    :optional: :optional
+- :method: GET
+  :url: "/api/v1/revenue/weekly"
+  :description: report of all revenue sorted by week; dates represent the first day
+    of each week
+  :query_params: []

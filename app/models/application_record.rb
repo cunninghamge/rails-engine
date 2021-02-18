@@ -6,4 +6,16 @@ class ApplicationRecord < ActiveRecord::Base
     skipped_pages = [page.to_i, 1].max - 1
     limit(results).offset(results * skipped_pages)
   end
+
+  def self.find_one_by_name(name)
+    return nil if name.blank?
+
+    where('name ilike ?', "%#{name}%").order(:name).first
+  end
+
+  def self.find_all_by_name(name)
+    return [] if name.blank?
+
+    where('name ilike ?', "%#{name}%")
+  end
 end

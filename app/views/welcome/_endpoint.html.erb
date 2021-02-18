@@ -1,0 +1,28 @@
+<section class='endpoint-info'>
+  <br>
+  <p class='url'><span class='method'><%= endpoint[:method] %></span>
+     <%= endpoint[:url] %></p>
+  <p class='description'>Description: <%= endpoint[:description].capitalize %></p>
+  <% if !endpoint[:query_params].empty? %>
+    <table>
+      <tr>
+        <td colspan=100%><strong>Accepted Parameters:</strong></td>
+      </tr>
+      <tr>
+        <th>name</th>
+        <th>data type</th>
+        <th>description</th>
+        <th>optional/required</th>
+      </tr>
+      <% endpoint[:query_params].each do |param| %>
+        <tr>
+          <td><%= param[:name] %></td>
+          <td><%= param[:data_type] %></td>
+          <td><%= param[:description] %></td>
+          <td><%= param[:optional] %></td>
+        </tr>
+      <% end %>
+    <% end %>
+  </table>
+  <br>
+</section>

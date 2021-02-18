@@ -8,35 +8,20 @@ class Item < ApplicationRecord
   before_destroy :destroy_dependent_invoices, prepend: true
 
   def destroy_dependent_invoices
-    invoices.unscope(:where)
-            .group('invoices.id')
-            .having("'{#{id}}' = (ARRAY_AGG(DISTINCT item_id))")
-            .destroy_all
+    Invoice.single_item_invoices(id).destroy_all
   end
 
-  def self.find_all_by_text(name)
-    return [] if name.blank?
-
-    where('LOWER(name) LIKE ?', "%#{name.downcase}%")
-  end
-
-  def self.search_by_text(name)
-    return nil if name.blank?
-
-    where('LOWER(name) LIKE ?', "%#{name.downcase}%").order(:name).first
+  def self.find_one_by_price(min_price, max_price)
+    find_by('unit_price BETWEEN ? AND ?', (min_price || 0), (max_price || Float::INFINITY))
   end
 
   def self.find_all_by_price(min_price, max_price)
     where('unit_price BETWEEN ? AND ?', (min_price || 0), (max_price || Float::INFINITY))
   end
 
-  def self.search_by_price(min_price, max_price)
-    find_by('unit_price BETWEEN ? AND ?', (min_price || 0), (max_price || Float::INFINITY))
-  end
-
   def self.select_items_by_revenue(quantity)
-    joins(invoices: :transactions)
-      .where(invoices: { status: :shipped }, transactions: { result: :success })
+    joins(:invoices)
+      .merge(Invoice.completed)
       .select('items.*, SUM(quantity * invoice_items.unit_price) revenue')
       .group(:id)
       .order(revenue: :desc)

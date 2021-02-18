@@ -23,8 +23,8 @@ RSpec.describe InvoiceItem, type: :model do
       expect(InvoiceItem.total_revenue_by_date('2012-03-09', '2012-03-11')).to eq(3.0)
     end
 
-    describe '.merchant_revenue' do
-      it 'returns the merchant with their total revenue' do
+    describe '.total_revenue' do
+      it 'returns the total revenue for successful invoices' do
         merchant = create(:merchant)
         5.times do
           item = create(:item, merchant: merchant)

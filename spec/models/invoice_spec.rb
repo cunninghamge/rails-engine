@@ -9,6 +9,21 @@ RSpec.describe Invoice, type: :model do
   end
 
   describe 'class methods' do
+    describe '.single_item_invoices' do
+      it 'finds invoices that have only one item using an item id' do
+        item_id = create(:item).id
+        invoice_with_item = create(:invoice)
+        create(:invoice_item, invoice: invoice_with_item, item_id: item_id)
+        invoice_with_multiple_items = create(:invoice)
+        create(:invoice_item, invoice: invoice_with_multiple_items, item_id: item_id)
+        create(:invoice_item, invoice: invoice_with_multiple_items, item: create(:item))
+        invoice_without_item = create(:invoice)
+        create(:invoice_item, invoice: invoice_without_item, item: create(:item))
+
+        expect(Invoice.single_item_invoices(item_id)).to eq([invoice_with_item])
+      end
+    end
+
     describe '.unshipped_orders' do
       before(:each) do
         11.times do |n|
