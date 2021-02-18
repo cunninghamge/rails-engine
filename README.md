@@ -147,9 +147,9 @@ Description: Find a specified number of merchants ranked by total revenue in des
 
 Accepted Parameters:
 
-| --- | --- | --- | --- |
 | name | data type | description | optional/required |
-| quantity | integer | the number of results to be returned | required |
+| --- | --- | --- | --- |
+| quantity | integer | the number of results to be returned | optional |
 
 ___
 **GET** /api/v1/merchants/most_items
