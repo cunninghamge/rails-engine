@@ -2,9 +2,9 @@
 
 Rails Engine is an API for viewing and interacting with the database of a fictitious E-Commerce Application. This was a solo project completed as part of the Back End Software Engineering curriculum at the Turing School of Software & Design.
 
-The deployed project can be found on Heroku at http://sales-engine-m3.herokuapp.com
+The deployed project can be found on Heroku at https://sales-engine-m3.herokuapp.com
 
-example query: http://sales-engine-m3.herokuapp.com/api/v1/items/5
+example query: https://sales-engine-m3.herokuapp.com/api/v1/items/5
 
 example response:
 ```
