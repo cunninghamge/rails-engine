@@ -25,8 +25,8 @@ class Merchant < ApplicationRecord
 
   def self.select_by_item_sales(quantity)
     select('merchants.*, SUM(quantity) sales_count')
-      .joins(items: { invoice_items: { invoice: :transactions } })
-      .where(invoices: { status: :shipped }, transactions: { result: :success })
+      .joins(items: { invoice_items: :invoice } )
+      .merge(Invoice.completed)
       .group(:id)
       .order(sales_count: :desc)
       .limit(quantity)
