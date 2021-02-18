@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Rails Engine</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all' %>
+    <style>
+      body {
+        background-color: lightgray;
+      }
+      table, tr, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        padding: 5px;
+      }
+      table {
+        border: 2px solid black;
+        width: 70%;
+      }
+      p {
+        margin-left: 20px;
+      }
+      .endpoint-info:hover {
+        background-color: #b7bfc8;
+        border-radius: 5px;
+      }
+      .url, .method {
+        border: 1px solid black;
+        border-radius: 5px;
+        padding: 7px;
+      }
+      .method {
+        background-color: darkseagreen;
+        margin-left: -10px;
+      }
+      .url {
+        background-color: aliceblue;
+        margin: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Sales Engine </h1>
+    <p class='url'><span class='method'>Base URL:</span> http://sales-engine-m3.herokuapp.com</p>
+    <p>example: http://sales-engine-m3.herokuapp.com/api/v1/items/5</p>
+    <hr>
+    <div class="category">
+      <h2>Merchant Information</h2>
+      <%= render partial: 'endpoint', collection: @merchant_endpoints %>
+    </div>
+    <hr>
+    <div class="category">
+      <h2>Item Information</h2>
+      <%= render partial: 'endpoint', collection: @item_endpoints %>
+    </div>
+    <hr>
+    <div class="category">
+      <h2>Business Analysis</h2>
+      <%= render partial: 'endpoint', collection: @analysis_endpoints %>
+    </div>
+  </body>
+</html>
