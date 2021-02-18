@@ -37,12 +37,12 @@ RSpec.describe Merchant, type: :model do
       end
     end
 
-    describe '.find_one' do
+    describe '.find_one_by_name' do
       it 'finds a merchant using a search term' do
         merchant = create(:merchant, name: "Ring World")
         create(:merchant, name: "Bob's Burgers")
 
-        expect(Merchant.find_one('ring')).to eq(merchant)
+        expect(Merchant.find_one_by_name('ring')).to eq(merchant)
       end
 
       it 'returns the first merchant in the database in case-sensitive alphabetical order if multiple matches are found' do
@@ -50,17 +50,17 @@ RSpec.describe Merchant, type: :model do
         annies_rings = create(:merchant, name: "Annie's Rings")
         ring_world = create(:merchant, name: "ring world")
 
-        expect(Merchant.find_one('ring')).to eq(annies_rings)
+        expect(Merchant.find_one_by_name('ring')).to eq(annies_rings)
       end
     end
 
-    describe '.find_all' do
+    describe '.find_all_by_name' do
       it 'finds a group of merchants using a search term' do
         crafts = [create(:merchant, name: "Handicraft World"),
                   create(:merchant, name: "The Craft Guy")]
         ring_world = create(:merchant, name: "Ring World")
 
-        expect(Merchant.find_all('craft')).to match_array(crafts)
+        expect(Merchant.find_all_by_name('craft')).to match_array(crafts)
       end
     end
 
