@@ -66,5 +66,5 @@ end
   rand(1..6).times do
     FactoryBot.create(:invoice_item, invoice: invoice, item: Item.order('random()').first, created_at: invoice.created_at)
   end
-  FactoryBot.create(:transaction, invoice: invoice, result: :refunded)
+  FactoryBot.create(:transaction, invoice: invoice, result: :failed)
 end
