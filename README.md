@@ -1,6 +1,6 @@
 # Rails Engine
 
-Rails Engine is an API for viewing and interacting with the database of a fictitious E-Commerce Application. This was a solo project completed as part of the Back End Software Engineering curriculum at the Turing School of Software & Design.
+Rails Engine is an API for viewing and interacting with the database for an E-Commerce Application.
 
 The deployed project can be found on Heroku at https://sales-engine-m3.herokuapp.com
 
@@ -21,7 +21,29 @@ example response:
   }
 }
 ```
-Database schema:
+
+### Learning Goals:
+
+  - [x] Build an API in Rails
+  - [x] Use serializers to format JSON responses
+  - [x] Test API exposure
+  - [x] Use ActiveRecord to find and analyze information stored in a SQL database
+
+### Local Setup
+ - Clone the repo to your local machine with: `git@github.com:cunninghamge/viewing_party.git`
+ - CD into the directory
+ - Install gem packages with: `bundle install`
+ - Set up your local database with: `rails db:{create,migrate,seed}`
+ - To run the test suite, run `bundle exec rspec`
+ - To start the server, run `rails s`
+ - To access the API through your local server, replace the base url with `http://localhost:3000`
+  ex: `http://localhost:3000//api/v1/merchants`
+
+#### Versions:
+ - Ruby 2.5.3
+ - Rails 5.2.4.3
+
+### Database schema:
 ![schema](schema.png)
 * * *
 ## Available Endpoints:
@@ -120,8 +142,17 @@ Accepted Parameters:
 ___
 **POST** /api/v1/items
 
-Description: Create an item; name, description, unit price, and merchant id are required.
+Description: Create an item. Name, description, unit price, and merchant id are required.
 
+Example:
+```
+{
+  "name": "Rustic Copper Napkin Rings",
+  "description": "High quality copper napkin rings for your next party",
+  "unit_price": 1.50,
+  "merchant_id": 9
+}
+```
 ___
 **PUT** /api/v1/items/:id
 
