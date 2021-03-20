@@ -1,5 +1,20 @@
 version: 2.1
 
+orbs:
+  heroku: circleci/heroku@0.0.10.
+  
+workflows:
+  version: 2.1
+  heroku_deploy:
+    jobs:
+      - build
+      - heroku/deploy-via-git:
+          requires:
+            - build
+          filters:
+            branches:
+              only: sequential-branch-filter
+
 jobs:
   build:
     working_directory: ~/turing/3module/projects/rails-engine
@@ -26,34 +41,3 @@ jobs:
       - run: bundle exec rails db:setup
 
       - run: bundle exec rspec
-
-deploy:
-    machine:
-        enabled: true
-    working_directory: ~/turing/3module/projects/rails-engine
-    environment:
-      HEROKU_APP: "sales-engine-m3"
-    steps:
-      - checkout
-      - run:
-          name: Setup Heroku
-          command: bash .circleci/setup-heroku.sh # run a script to set up Heroku
-
-      - run:
-          command: |
-            git push heroku sequential-branch-filter:main
-            heroku run rake db:migrate
-            sleep 5
-            heroku restart
-
-workflows:
-  version: 2.1
-  build-and-deploy:
-    jobs:
-      - build
-      - deploy:
-          requires:
-            - build
-          filters:
-            branches:
-              only: sequential-branch-filter
