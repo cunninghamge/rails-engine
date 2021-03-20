@@ -13,7 +13,7 @@ jobs:
         environment:
           POSTGRES_USER: rails-engine
           POSTGRES_DB: rails-engine_test
-          POSTGRES_PASSWORD: ""
+          POSTGRES_HOST_AUTH_METHOD: trust
     steps:
       - checkout
 
