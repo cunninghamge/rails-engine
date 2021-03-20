@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  heroku: circleci/heroku@0.0.10.
+
 jobs:
   build:
     working_directory: ~/turing/3module/projects/rails-engine
@@ -23,8 +26,6 @@ jobs:
 
       - run: dockerize -wait tcp://localhost:5432 -timeout 1m
 
-      # - run: cp .sample.env .env
-
       - run: bundle exec rails db:setup
 
       - run: bundle exec rspec
@@ -34,3 +35,12 @@ workflows:
   integration:
     jobs:
       - build
+      heroku_deploy:
+  jobs:
+    - build
+    - heroku/deploy-via-git:
+        requires:
+          - build
+        filters:
+          branches:
+            only: sequential-branch-filter
